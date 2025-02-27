@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../app.module';
@@ -12,6 +12,9 @@ describe('API endpoints testing (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.enableVersioning({
+      type: VersioningType.URI,
+    });
     app.enableShutdownHooks();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
@@ -24,20 +27,20 @@ describe('API endpoints testing (e2e)', () => {
   describe('/post order', () => {
     it('empty body should throw error', async () => {
       const response = await request(app.getHttpServer())
-        .post('/orders')
+        .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
         .send();
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('customer_id must be a string');
+      expect(response.body.message).toContain('customerId must be a string');
       expect(response.body.message).toContain('items should not be empty');
       expect(response.body.message).toContain('items must be an array');
     });
 
     it('should return 400 when missing customer id', async () => {
       const response = await request(app.getHttpServer())
-        .post('/orders')
+        .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
           items: [{ productId: '98765', quantity: 2 }],
@@ -45,12 +48,12 @@ describe('API endpoints testing (e2e)', () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('message');
-      expect(response.body.message).toContain('customer_id must be a string');
+      expect(response.body.message).toContain('customerId must be a string');
     });
 
     it('should return 400 when missing items', async () => {
       const response = await request(app.getHttpServer())
-        .post('/orders')
+        .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
           customerId: '12345',
@@ -63,7 +66,7 @@ describe('API endpoints testing (e2e)', () => {
 
     it('should return 400 when empty items', async () => {
       const response = await request(app.getHttpServer())
-        .post('/orders')
+        .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
           customerId: '12345',
@@ -77,7 +80,7 @@ describe('API endpoints testing (e2e)', () => {
 
     it('should create an order successfully', async () => {
       const response = await request(app.getHttpServer())
-        .post('/orders')
+        .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
           customerId: '12345',
