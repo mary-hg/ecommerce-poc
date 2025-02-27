@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateOrderCommand } from './command/impl/create-order.command';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { CreateOrderCommand } from './application/command/impl/create-order.command';
+import { CreateOrderDto } from './application/dto/create-order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -10,7 +10,7 @@ export class OrdersController {
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.commandBus.execute(
-      new CreateOrderCommand(createOrderDto.customer_id, createOrderDto.items),
+      new CreateOrderCommand(createOrderDto.customerId, createOrderDto.items),
     );
   }
 }

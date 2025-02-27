@@ -9,7 +9,7 @@ import { OrderItemDto } from './order-item.dto';
 
 export class CreateOrderDto {
   @IsString()
-  customer_id: string;
+  customerId: string;
 
   @IsArray()
   @ArrayNotEmpty()

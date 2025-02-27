@@ -40,7 +40,7 @@ describe('API endpoints testing (e2e)', () => {
         .post('/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
-          items: [{ product_id: '98765', quantity: 2 }],
+          items: [{ productId: '98765', quantity: 2 }],
         });
 
       expect(response.status).toBe(400);
@@ -53,7 +53,7 @@ describe('API endpoints testing (e2e)', () => {
         .post('/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
-          customer_id: '12345',
+          customerId: '12345',
         });
 
       expect(response.status).toBe(400);
@@ -66,7 +66,7 @@ describe('API endpoints testing (e2e)', () => {
         .post('/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
-          customer_id: '12345',
+          customerId: '12345',
           items: [],
         });
 
@@ -80,10 +80,10 @@ describe('API endpoints testing (e2e)', () => {
         .post('/orders')
         .set('Authorization', 'Bearer valid-token')
         .send({
-          customer_id: '12345',
+          customerId: '12345',
           items: [
-            { product_id: '98765', quantity: 2 },
-            { product_id: '54321', quantity: 1 },
+            { productId: '98765', quantity: 2 },
+            { productId: '54321', quantity: 1 },
           ],
         });
 
