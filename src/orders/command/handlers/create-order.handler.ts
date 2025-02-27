@@ -2,6 +2,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { CreateOrderCommand } from '../impl/create-order.command';
 import { OrderRepository } from '../../repository/order.repository';
+import { Order } from '../../models/order.model';
 
 @CommandHandler(CreateOrderCommand)
 export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand> {
@@ -11,11 +12,12 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand> {
   ) {}
 
   async execute(command: CreateOrderCommand) {
-    const { orderId } = command;
-    const order = this.publisher.mergeObjectContext(
-      await this.repository.findOneById(+orderId),
-    );
-    order.create();
+    const { customer_id, items } = command;
+    const OrderModel = this.publisher.mergeClassContext(Order);
+    const order = new OrderModel();
+    order.create(customer_id, items);
+    await this.repository.persist(order);
     order.commit();
+    return order;
   }
 }
