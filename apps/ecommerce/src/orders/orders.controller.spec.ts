@@ -90,22 +90,4 @@ describe('API endpoints testing (e2e)', () => {
       expect(response.status).toBe(201);
     });
   });
-  // it('should return 401 if authorization is missing', async () => {
-  //   const response = await request(app.getHttpServer())
-  //     .post('/orders')
-  //     .send({
-  //       customer_id: '12345',
-  //       items: [{ product_id: '98765', quantity: 2 }],
-  //       payment_method: 'credit_card',
-  //       shipping_address: {
-  //         street: '123 Main St',
-  //         city: 'Madrid',
-  //         postal_code: '28001',
-  //         country: 'Spain',
-  //       },
-  //     });
-  //
-  //   expect(response.status).toBe(401);
-  //   expect(response.body).toHaveProperty('message', 'Unauthorized');
-  // });
 });

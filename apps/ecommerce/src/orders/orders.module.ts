@@ -3,7 +3,7 @@ import { OrdersController } from './orders.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { CommandHandlers } from './application/command/handlers';
-import { EventHandlers } from './events/handlers';
+import { EventHandlers } from './application/events/handlers';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { OrderRepositoryImpl } from './infrastructure/repository/order-repository-impl';

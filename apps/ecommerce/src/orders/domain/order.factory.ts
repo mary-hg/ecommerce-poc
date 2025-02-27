@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Order, OrderProperties } from './order';
-import { OrderCreatedEvent } from '../events/impl/order-created.event';
+import { OrderCreatedEvent } from '../application/events/impl/order-created.event';
 
 export class OrderFactory {
   @Inject() private readonly eventPublisher: EventPublisher;
