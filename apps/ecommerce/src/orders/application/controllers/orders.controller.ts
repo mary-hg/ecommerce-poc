@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateOrderCommand } from '../command/impl/create-order.command';
 import { CreateOrderDto } from './dto/request/create-order.dto';
@@ -12,6 +12,7 @@ import { Order } from '../../domain/order';
 import { OrderItemDto } from './dto/response/order-item.dto';
 import { OrderItem } from '../../domain/order-item';
 import { OrderDto } from './dto/response/order.dto';
+import { JwtAuthGuard } from '../../../auth/guard/auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('orders')
@@ -39,6 +40,7 @@ export class OrdersController {
     description: 'The found record',
     type: OrderDto,
   })
+  @UseGuards(JwtAuthGuard)
   async create(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     const order: Order = await this.commandBus.execute(
       new CreateOrderCommand(createOrderDto.customerId, createOrderDto.items),
