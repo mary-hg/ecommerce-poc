@@ -1,7 +1,11 @@
-import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../app.module';
+import { AppModule } from '../../../app.module';
 
 describe('API endpoints testing (e2e)', () => {
   let app: INestApplication;
