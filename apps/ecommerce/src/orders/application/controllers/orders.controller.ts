@@ -13,6 +13,9 @@ import { OrderItemDto } from './dto/response/order-item.dto';
 import { OrderItem } from '../../domain/order-item';
 import { OrderDto } from './dto/response/order.dto';
 import { JwtAuthGuard } from '../../../auth/guard/auth.guard';
+import { RolesGuard } from '../../../auth/roles/roles.guard';
+import { Roles } from '../../../auth/roles/roles.decorator';
+import { Role } from '../../../auth/roles/roles.enum';
 
 @ApiBearerAuth()
 @ApiTags('orders')
@@ -40,7 +43,8 @@ export class OrdersController {
     description: 'The found record',
     type: OrderDto,
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User)
   async create(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     const order: Order = await this.commandBus.execute(
       new CreateOrderCommand(createOrderDto.customerId, createOrderDto.items),

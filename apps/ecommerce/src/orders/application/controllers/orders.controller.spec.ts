@@ -6,8 +6,11 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../../../app.module';
+import { JwtService } from '@nestjs/jwt';
+import { AuthPayload } from '../../../auth/auth_payload';
 
 describe('API endpoints testing (e2e)', () => {
+  let jwtService: JwtService;
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -21,6 +24,7 @@ describe('API endpoints testing (e2e)', () => {
     });
     app.enableShutdownHooks();
     app.useGlobalPipes(new ValidationPipe());
+    jwtService = app.get<JwtService>(JwtService);
     await app.init();
   });
 
@@ -69,6 +73,7 @@ describe('API endpoints testing (e2e)', () => {
     });
 
     it('should return 400 when empty items', async () => {
+
       const response = await request(app.getHttpServer())
         .post('/v1/orders')
         .set('Authorization', 'Bearer valid-token')
@@ -83,9 +88,17 @@ describe('API endpoints testing (e2e)', () => {
     });
 
     it('should create an order successfully', async () => {
+      const payload: AuthPayload = {
+        username: 'john',
+        sub: 'id',
+        roles: ['user'],
+      };
+
+      const token = jwtService.sign(payload);
+
       const response = await request(app.getHttpServer())
         .post('/v1/orders')
-        .set('Authorization', 'Bearer valid-token')
+        .set('Authorization', `Bearer ${token}`)
         .send({
           customerId: '12345',
           items: [
