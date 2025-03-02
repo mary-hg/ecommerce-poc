@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { OrdersController } from './application/controllers/orders.controller';
+import { OrdersController } from './application/controller/orders.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { CommandHandlers } from './application/command/handlers';
